@@ -1,0 +1,94 @@
+%{
+open GCLTypesAST
+%}
+
+%token <string> X
+%token <float> NUM
+%token <bool> BOOL
+%token TIMES DIV PLUS MINUS POW LPAR RPAR MOD EOF 
+// bools
+%token OR AND NOT EQUAL NOT_EQUAL GREATER SMALLER EQ_GREATER EQ_SMALLER B_LPAR B_RPAR LBRAC RBRAC
+
+
+
+// We declare the initial non-terminal symbol
+%start start
+
+// We specify the return type of each of then non-terminal symbols
+%type <boolExpr> start
+%type <arithmeticExpr> expression0
+%type <arithmeticExpr> expression1
+%type <arithmeticExpr> expression2
+%type <arithmeticExpr> expression3
+%type <boolExpr> expressionb0
+%type <boolExpr> expressionb1
+%type <boolExpr> expressionb2
+
+
+// Grammar productions
+%%
+
+// The first production in "formal" notation is
+// start -> expressionb0
+// here written:
+start: expressionb0 EOF             { $1 }
+
+// Note that we need to insert an End-Of-File (EOF)
+// The code annotation { $1 } specifies that parsing with this production
+// returns whatever parsing the expression returns: $1 is the result of parsing
+// the first component of the production (i.e. expression)
+
+// The productions for expressions are like in the grammar we saw in class
+// written in the yacc format:
+expressionb0:
+  | expressionb0 AND expressionb0      {AndExpr($1,$3)}
+  | expressionb0 OR expressionb0       {OrExpr($1,$3)}
+  | NOT expressionb0                    {NotExpr($2)}
+  | expressionb1                        {$1}
+
+expressionb1:
+  | BOOL                                {Bool($1)}
+  | B_LPAR expressionb0 B_RPAR          { $2 }
+  | expressionb2                        {$1}
+
+expressionb2:
+  | expression0 GREATER expression0    { GreaterExpr($1,$3)}
+  | expression0 EQ_GREATER expression0    { EqGreaterExpr($1,$3)}
+  | expression0 SMALLER expression0    { SmallerExpr($1,$3)}
+  | expression0 EQ_SMALLER expression0    { EqSmallerExpr($1,$3)}
+  | expression0 EQUAL expression0      { EqualExpr($1,$3)}
+  | expression0 NOT_EQUAL expression0  { NotEqualExpr($1,$3)}
+
+//arithmetic
+expression0:
+  | expression0 PLUS expression0    { PlusExpr($1,$3) }
+  | expression0 MINUS expression0   { MinusExpr($1,$3) }
+  | expression1                     { $1 }
+
+expression1:
+  | expression1 TIMES expression1   { TimesExpr($1,$3) }
+  | expression1 DIV expression1     { DivExpr($1,$3) }
+  | expression1 MOD expression1     { ModExpr($1,$3) }
+  | expression2                     { $1 }
+
+expression2:
+  | expression3 POW expression2     { PowExpr($1,$3) }
+  | expression3                     { $1 }
+
+expression3:
+  | PLUS expression3               { UPlusExpr($2) }
+  | MINUS expression3              { UMinusExpr($2) }
+  | NUM                            { Num($1) }
+  | X                              { Var($1)}
+  | LPAR expression0 RPAR          { $2 }
+  | X LBRAC expression0 RBRAC        { ArrayExpr($1,$3) }
+  // bools
+
+
+
+// Again, the code annotation specifies the result of parsing
+// For example { TimesExpr($1,$3) } specifies that parsing with the production
+// returns the value TimesExpr($1,$3), where $i is the result of parsing
+// component i in the production (in this case the lhs and rhs operands)
+
+%%

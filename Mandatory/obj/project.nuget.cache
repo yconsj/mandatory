@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "skHIMwWHgGGDx+ZVj30w08b+2D8wPwMtLqdVNUPFn3LNzSS2WCR67R2ce5WX3ycb73T28zqEUS88+jYqXyUlsA==",
+  "success": true,
+  "projectFilePath": "c:\\Users\\simon\\OneDrive\\DTU\\datalogsk model\\CL3\\mandatory\\Mandatory\\Mandatory.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\simon\\.nuget\\packages\\fsharp.core\\4.7.2\\fsharp.core.4.7.2.nupkg.sha512",
+    "C:\\Users\\simon\\.nuget\\packages\\fslexyacc\\10.0.0\\fslexyacc.10.0.0.nupkg.sha512",
+    "C:\\Users\\simon\\.nuget\\packages\\fslexyacc.runtime\\10.0.0\\fslexyacc.runtime.10.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
