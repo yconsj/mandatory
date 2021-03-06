@@ -27,7 +27,6 @@ rule tokenize = parse
 // deal with tokens that need to be built
 | num           { NUM(Double.Parse(LexBuffer<_>.LexemeString lexbuf)) }
 | bool { BOOL(bool.Parse(LexBuffer<_>.LexemeString lexbuf)) }
-| x             { X((LexBuffer<_>.LexemeString lexbuf))}
 | '('           { B_LPAR }
 | ')'           { B_RPAR }
 
@@ -46,10 +45,10 @@ rule tokenize = parse
 
 //bool tokens
 
-//| '&'           { IDK? }
-//| '|'           { IDK? }
-| "||"          { OR }
-| "&&"         { AND }
+| '&'           { OR }
+| '|'           { AND }
+| "||"          { COND_OR }
+| "&&"          { COND_AND }
 | '!'           { NOT }
 | '='           { EQUAL }
 | "!="          { NOT_EQUAL }
@@ -57,3 +56,32 @@ rule tokenize = parse
 | '<'           { SMALLER }
 | ">="          { EQ_GREATER }
 | "<="          { EQ_SMALLER }
+
+//HC symbols
+| ':'           { COLON }
+| '['           { HC_LBRAC }
+| ']'           { HC_RBRAC }
+//GC
+| "->"          { ARROW }
+| '['           { GC_LBRAC}
+| ']'           { GC_RBRAC}
+
+// C
+| '['           { C_LBRAC}
+| ']'           { C_RBRAC}
+| ":="          { ASSIGN }
+| "skip"        { SKIP }
+| ';'           { SEMI_COLON}
+| "if"            { IF }
+| "fi"            { FI }
+| "do"            { DO }
+| "od"            { OD }
+| "continue"      { CONTINUE }
+| "break"         { BREAK }
+| "try"           { TRY }
+| "catch"         { CATCH }
+| "yrt"           { YRT } 
+| "throw"         { THROW }
+
+
+| x             { X((LexBuffer<_>.LexemeString lexbuf))}

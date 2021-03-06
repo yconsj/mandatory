@@ -8,19 +8,36 @@ open GCLParser
 #load "GCLLexer.fs"
 open GCLLexer
 
-
-let rec prettyPrinterB gcl =
+let rec prettyPrinterC gcl =
         match gcl with
-        | Bool(x) -> string x
-        | EqualExpr(l,r)      ->  string "("+(prettyPrinterA l) + "=" + (prettyPrinterA r) + ")"
-        | NotEqualExpr(l,r)   ->  string "("+(prettyPrinterA l) + "!=" + (prettyPrinterA r) + ")"
-        | GreaterExpr(l,r)   ->  string "("+(prettyPrinterA l) + ">" + (prettyPrinterA r) + ")"
-        | SmallerExpr(l,r)   ->  string "("+(prettyPrinterA l) + "<" + (prettyPrinterA r) + ")"
-        | EqGreaterExpr(l,r)   ->  string "("+(prettyPrinterA l) + ">=" + (prettyPrinterA r) + ")"
-        | EqSmallerExpr(l,r)   ->  string "("+(prettyPrinterA l) + "<=" + (prettyPrinterA r) + ")"
-        | OrExpr(l,r)       ->  string "("+(prettyPrinterB l) + "||" + (prettyPrinterB r) + ")"
-        | AndExpr(l,r)       ->  string "("+(prettyPrinterB l) + "&&" + (prettyPrinterB r) + ")"    
-        | NotExpr(l)       ->  string "(!" + (prettyPrinterB l) + ")"
+        | AssignExpr(a,e)            ->  string "(" + a+ ":=" + (prettyPrinterA e) + ")"
+        | ArrayAssignExpr(a,e1,e2)   ->  string "(" + a + "[" + (prettyPrinterA e1) + "]" + ":=" + (prettyPrinterA e2) + ")"
+        | SemiColonExpr(e1,e2)       ->  string "(" + (prettyPrinterC e1) + ";" + (prettyPrinterC e2) + ")"
+        | IfExpr(e)                  ->  string "(if" + (prettyPrinterC e) + "fi)"
+        | DoExpr(e)                  ->  string "(do" + (prettyPrinterC e) + "od)"
+        | TryCatchExpr(e1, e2)       ->  string "(try" + (prettyPrinterC e1) + "catch" + (prettyPrinterC e2) + "yrt)"
+        | BreakExpr(x)               -> string "(" + x + ")"
+        | ThrowExpr(x)               -> string "(" + x + ")" 
+        | SkipExpr(x)                -> string "(" + x + ")"
+        | ContinueExpr(x)            -> string "(" + x + ")"
+        | ArrowExpr(b,e)             -> string "(" + (prettyPrinterB b) + "->" + (prettyPrinterC e) + ")"
+        | GCLoopExpr(e1, e2)         -> string "(" + (prettyPrinterC e1) + "[]" + (prettyPrinterC e2) + ")"
+        | ColonExpr(s, e)            -> string "(" + s + ":" + (prettyPrinterC e) + ")"
+        | HCLoopExpr(e1,e2)          -> string "(" + (prettyPrinterC e1) + "[]" + (prettyPrinterC e2) + ")"
+and prettyPrinterB gcl =
+    match gcl with
+    | Bool(x) -> string x
+    | EqualExpr(l,r)      ->  string "("+(prettyPrinterA l) + "=" + (prettyPrinterA r) + ")"
+    | NotEqualExpr(l,r)   ->  string "("+(prettyPrinterA l) + "!=" + (prettyPrinterA r) + ")"
+    | GreaterExpr(l,r)   ->  string "("+(prettyPrinterA l) + ">" + (prettyPrinterA r) + ")"
+    | SmallerExpr(l,r)   ->  string "("+(prettyPrinterA l) + "<" + (prettyPrinterA r) + ")"
+    | EqGreaterExpr(l,r)   ->  string "("+(prettyPrinterA l) + ">=" + (prettyPrinterA r) + ")"
+    | EqSmallerExpr(l,r)   ->  string "("+(prettyPrinterA l) + "<=" + (prettyPrinterA r) + ")"
+    | OrExpr(l,r)       ->  string "("+(prettyPrinterB l) + "|" + (prettyPrinterB r) + ")"
+    | AndExpr(l,r)       ->  string "("+(prettyPrinterB l) + "&" + (prettyPrinterB r) + ")"    
+    | CondOrExpr(l,r)       ->  string "("+(prettyPrinterB l) + "||" + (prettyPrinterB r) + ")"
+    | CondAndExpr(l,r)       ->  string "("+(prettyPrinterB l) + "&&" + (prettyPrinterB r) + ")"    
+    | NotExpr(l)       ->  string "(!" + (prettyPrinterB l) + ")"
 and prettyPrinterA gcl =
     match gcl with
     | Num(x) ->  string x
@@ -34,6 +51,7 @@ and prettyPrinterA gcl =
     | MinusExpr(l,r)      ->  string "("+(prettyPrinterA l) + "-" + (prettyPrinterA r) + ")"
     | PowExpr(l,r)        ->  string "("+(prettyPrinterA l) + "^" + (prettyPrinterA r) + ")"
     | ModExpr(l,r)        ->  string "("+(prettyPrinterA l) + "%" + (prettyPrinterA r) + ")"
+
 // We
 let parse input =
     // translate string into a buffer of characters
@@ -53,8 +71,8 @@ let rec compute n =
         // We parse the input string
         let gcl = parse (Console.ReadLine())
         // and print the result of evaluating it
-        printfn "Result: %s" (prettyPrinterB gcl)
-        //printfn "Result: %A" (gcl)
+        printfn "Result: %s" (prettyPrinterC gcl)
+        printfn "Result: %A" (gcl)
         compute n
         with err -> compute (n-1)
 

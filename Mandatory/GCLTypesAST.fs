@@ -15,6 +15,8 @@ type arithmeticExpr =
 
  type boolExpr = 
   | Bool of bool
+  | CondOrExpr of (boolExpr * boolExpr)
+  | CondAndExpr of (boolExpr * boolExpr)
   | OrExpr of (boolExpr * boolExpr)
   | AndExpr of (boolExpr * boolExpr)
   | NotExpr of (boolExpr)
@@ -24,4 +26,21 @@ type arithmeticExpr =
   | SmallerExpr of (arithmeticExpr * arithmeticExpr)
   | EqGreaterExpr of (arithmeticExpr * arithmeticExpr)
   | EqSmallerExpr of (arithmeticExpr * arithmeticExpr)
-  // MISSING & |
+
+type CExpr =
+  | AssignExpr of (string * arithmeticExpr)
+  | ArrayAssignExpr of (string * arithmeticExpr * arithmeticExpr)
+  | SemiColonExpr of (CExpr * CExpr)
+  | IfExpr of CExpr
+  | DoExpr of CExpr
+  | TryCatchExpr of CExpr * CExpr
+  | BreakExpr of string
+  | ThrowExpr of string
+  | SkipExpr of string
+  | ContinueExpr of string
+//type GCExpr =
+  | ArrowExpr of (boolExpr * CExpr)
+  | GCLoopExpr of (CExpr * CExpr)
+//type HCExpr =
+  | ColonExpr of (string * CExpr)
+  | HCLoopExpr of (CExpr * CExpr)
