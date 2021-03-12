@@ -6,6 +6,7 @@ open GCLTypesAST
 
 %token <float> NUM
 %token <bool> BOOL
+%token <string> ERR
 %token TIMES DIV PLUS MINUS POW LPAR RPAR MOD EOF 
 // bools
 %token OR AND NOT EQUAL NOT_EQUAL GREATER SMALLER EQ_GREATER EQ_SMALLER B_LPAR B_RPAR LBRAC RBRAC
@@ -26,8 +27,7 @@ open GCLTypesAST
 %type <boolExpr> expressionB1
 %type <boolExpr> expressionB2
 %type <CExpr> expressionC0
-%type <CExpr> expressionGC0
-%type <CExpr> expressionHC0
+%type <GCExpr> expressionGC0
 
 
 // Grammar productions
@@ -37,14 +37,9 @@ open GCLTypesAST
 // start -> expressionC0
 // here written:
 start: expressionC0 EOF             { $1 }
+//Start with C expressions
 
-// Note that we need to insert an End-Of-File (EOF)
-// The code annotation { $1 } specifies that parsing with this production
-// returns whatever parsing the expression returns: $1 is the result of parsing
-// the first component of the production (i.e. expression)
-
-// The productions for expressions are like in the grammar we saw in class
-// written in the yacc format:
+//boolean
 expressionB0:
   | expressionB0 AND expressionB0      {AndExpr($1,$3)}
   | expressionB0 OR expressionB0       {OrExpr($1,$3)}
@@ -90,31 +85,19 @@ expressionA3:
   | LPAR expressionA0 RPAR          { $2 }
   | X LBRAC expressionA0 RBRAC      { ArrayExpr($1,$3) }
 
-
-expressionHC0:
-  | X COLON expressionC0                           { ColonExpr($1,$3)}
-  | expressionHC0 HC_LBRAC HC_RBRAC expressionHC0  { HCLoopExpr($1, $4)}
-
+//Guarded command
 expressionGC0:  
   | expressionB0 ARROW expressionC0                { ArrowExpr($1, $3)}
   | expressionGC0 GC_LBRAC GC_RBRAC expressionGC0  { GCLoopExpr($1, $4)}
-
+// Command
 expressionC0:
   | X C_LBRAC expressionA0 C_RBRAC ASSIGN expressionA0        { ArrayAssignExpr($1,$3, $6)}
   | X ASSIGN expressionA0                          { AssignExpr($1, $3)}
   | IF expressionGC0 FI                            { IfExpr($2)}
   | DO expressionGC0 OD                            { DoExpr($2)}
-  | TRY expressionC0 CATCH expressionHC0 YRT       { TryCatchExpr($2,$4) }
-  | CONTINUE                                       { ContinueExpr("CONTINUE") }
-  | BREAK                                          { BreakExpr("BREAK") }
-  | SKIP                                           { SkipExpr("SKIP") }
-  | THROW X                                        { ThrowExpr($2)}
+  | SKIP                                           { SkipExpr("skip")}
+  | expressionC0 SEMI_COLON expressionC0           { SemiColonExpr($1,$3)}
 
 
-
-// Again, the code annotation specifies the result of parsing
-// For example { TimesExpr($1,$3) } specifies that parsing with the production
-// returns the value TimesExpr($1,$3), where $i is the result of parsing
-// component i in the production (in this case the lhs and rhs operands)
 
 %%

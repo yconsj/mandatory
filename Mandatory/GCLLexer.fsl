@@ -19,11 +19,13 @@ let newline     = "\n\r" | '\n' | '\r'
 // We define now the rules for recognising and building tokens
 // for each of the tokens of our language we need a rule
 // NOTE: rules are applied in order top-down.
-//       This is important when tokens overlap (not in this example)
+//This is important when tokens overlap (Why x is the lowest, so "false" wont be treated like a variable but a boolean)
+// NOTE: x is a string variable, but it is also what we use to define an array A
 rule tokenize = parse
 // deal with tokens that need to be ignored (skip them)
 | whitespace    { tokenize lexbuf }
 | newline       { lexbuf.EndPos <- lexbuf.EndPos.NextLine; tokenize lexbuf; }
+
 // deal with tokens that need to be built
 | num           { NUM(Double.Parse(LexBuffer<_>.LexemeString lexbuf)) }
 | bool { BOOL(bool.Parse(LexBuffer<_>.LexemeString lexbuf)) }
@@ -58,9 +60,10 @@ rule tokenize = parse
 | "<="          { EQ_SMALLER }
 
 //HC symbols
-| ':'           { COLON }
-| '['           { HC_LBRAC }
-| ']'           { HC_RBRAC }
+//| ':'           { COLON }
+//| '['           { HC_LBRAC }
+//| ']'           { HC_RBRAC }
+
 //GC
 | "->"          { ARROW }
 | '['           { GC_LBRAC}
@@ -76,12 +79,12 @@ rule tokenize = parse
 | "fi"            { FI }
 | "do"            { DO }
 | "od"            { OD }
-| "continue"      { CONTINUE }
-| "break"         { BREAK }
-| "try"           { TRY }
-| "catch"         { CATCH }
-| "yrt"           { YRT } 
-| "throw"         { THROW }
+//| "continue"      { CONTINUE }
+//| "break"         { BREAK }
+//| "try"           { TRY }
+//| "catch"         { CATCH }
+//| "yrt"           { YRT } 
+//| "throw"         { THROW }
 
 
 | x             { X((LexBuffer<_>.LexemeString lexbuf))}

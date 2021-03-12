@@ -46,6 +46,7 @@ type token =
   | RPAR
   | MOD
   | EOF
+  | ERR of (string)
   | BOOL of (bool)
   | NUM of (float)
   | X of (string)
@@ -95,6 +96,7 @@ type tokenId =
     | TOKEN_RPAR
     | TOKEN_MOD
     | TOKEN_EOF
+    | TOKEN_ERR
     | TOKEN_BOOL
     | TOKEN_NUM
     | TOKEN_X
@@ -110,7 +112,6 @@ type nonTerminalId =
     | NONTERM_expressionA1
     | NONTERM_expressionA2
     | NONTERM_expressionA3
-    | NONTERM_expressionHC0
     | NONTERM_expressionGC0
     | NONTERM_expressionC0
 /// This function maps tokens to integer indexes

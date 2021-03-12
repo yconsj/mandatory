@@ -1,5 +1,6 @@
 module GCLTypesAST
 
+//Different types of expressions
 type arithmeticExpr =
   | Num of float
   | Var of string
@@ -31,16 +32,10 @@ type CExpr =
   | AssignExpr of (string * arithmeticExpr)
   | ArrayAssignExpr of (string * arithmeticExpr * arithmeticExpr)
   | SemiColonExpr of (CExpr * CExpr)
-  | IfExpr of CExpr
-  | DoExpr of CExpr
-  | TryCatchExpr of CExpr * CExpr
-  | BreakExpr of string
-  | ThrowExpr of string
+  | IfExpr of GCExpr
+  | DoExpr of GCExpr
   | SkipExpr of string
-  | ContinueExpr of string
-//type GCExpr =
+
+and GCExpr =
   | ArrowExpr of (boolExpr * CExpr)
-  | GCLoopExpr of (CExpr * CExpr)
-//type HCExpr =
-  | ColonExpr of (string * CExpr)
-  | HCLoopExpr of (CExpr * CExpr)
+  | GCLoopExpr of (GCExpr * GCExpr)

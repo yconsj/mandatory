@@ -8,22 +8,20 @@ open GCLParser
 #load "GCLLexer.fs"
 open GCLLexer
 
+
+//prettyprinter
 let rec prettyPrinterC gcl =
         match gcl with
         | AssignExpr(a,e)            ->  string "(" + a+ ":=" + (prettyPrinterA e) + ")"
         | ArrayAssignExpr(a,e1,e2)   ->  string "(" + a + "[" + (prettyPrinterA e1) + "]" + ":=" + (prettyPrinterA e2) + ")"
         | SemiColonExpr(e1,e2)       ->  string "(" + (prettyPrinterC e1) + ";" + (prettyPrinterC e2) + ")"
-        | IfExpr(e)                  ->  string "(if" + (prettyPrinterC e) + "fi)"
-        | DoExpr(e)                  ->  string "(do" + (prettyPrinterC e) + "od)"
-        | TryCatchExpr(e1, e2)       ->  string "(try" + (prettyPrinterC e1) + "catch" + (prettyPrinterC e2) + "yrt)"
-        | BreakExpr(x)               -> string "(" + x + ")"
-        | ThrowExpr(x)               -> string "(" + x + ")" 
-        | SkipExpr(x)                -> string "(" + x + ")"
-        | ContinueExpr(x)            -> string "(" + x + ")"
-        | ArrowExpr(b,e)             -> string "(" + (prettyPrinterB b) + "->" + (prettyPrinterC e) + ")"
-        | GCLoopExpr(e1, e2)         -> string "(" + (prettyPrinterC e1) + "[]" + (prettyPrinterC e2) + ")"
-        | ColonExpr(s, e)            -> string "(" + s + ":" + (prettyPrinterC e) + ")"
-        | HCLoopExpr(e1,e2)          -> string "(" + (prettyPrinterC e1) + "[]" + (prettyPrinterC e2) + ")"
+        | IfExpr(e)                  ->  string "(if" + (prettyPrinterGC e) + "fi)"
+        | DoExpr(e)                  ->  string "(do" + (prettyPrinterGC e) + "od)"
+        | SkipExpr(s)                ->  string s
+and prettyPrinterGC gcl =
+    match gcl with
+      | GCLoopExpr(e1, e2)         -> string "(" + (prettyPrinterGC e1) + "[]" + (prettyPrinterGC e2) + ")"
+      | ArrowExpr(b,e)             -> string "(" + (prettyPrinterB b) + "->" + (prettyPrinterC e) + ")"
 and prettyPrinterB gcl =
     match gcl with
     | Bool(x) -> string x
@@ -52,7 +50,28 @@ and prettyPrinterA gcl =
     | PowExpr(l,r)        ->  string "("+(prettyPrinterA l) + "^" + (prettyPrinterA r) + ")"
     | ModExpr(l,r)        ->  string "("+(prettyPrinterA l) + "%" + (prettyPrinterA r) + ")"
 
-// We
+type Edge =
+     | Edge of string
+type Node =
+     | Node of Edge * string * Edge
+
+
+let rec compiler AST n1 n2 count =
+        match AST with
+        | AssignExpr(a,e)            ->  [Node(n1, a + ":=" + prettyPrinterA e, n2)]
+        | SemiColonExpr(e1,e2)       ->  let nNew = Edge ("n" + (string (count+1)))
+                                         (compiler e1 n1 nNew (count+1)) @ (compiler e2 n2 nNew (count+2))
+        | ArrayAssignExpr(a,e1,e2)   ->  [Node(n1, a + "["+prettyPrinterA e1 + "]:=" + prettyPrinterA e2, n2)]
+        //| IfExpr(e)                  ->  compiler e n1 n2 count
+        //| DoExpr(e)                  ->  let b = findDone e
+        //                                 (compiler e n1 n2 count+1) @ [Node(n1, b,n2)]
+        | SkipExpr(s)                ->  [Node(n1, "skip",n2)]
+//and findDone expr =
+  //  match expr with
+    //| GCLoopExpr(e1,e2) -> string (findDone e1) + "&" + (findDone e2)
+    //| ArrowExpr(b,e) -> string "!"+ prettyPrinterB b
+
+// Pase from calculator example, using to parse readline
 let parse input =
     // translate string into a buffer of characters
     let lexbuf = LexBuffer<char>.FromString input
@@ -62,19 +81,21 @@ let parse input =
     res
 
 // We implement here the function that interacts with the user
-let rec compute n =
-    if n = 0 then
+let rec computeAST n =
+   if n = 0 then
         printfn "Bye bye"
     else
-        printf "Enter an GCL: "
+        printf "Enter a GCL expression: "
+
         try
-        // We parse the input string
-        let gcl = parse (Console.ReadLine())
-        // and print the result of evaluating it
-        printfn "Result: %s" (prettyPrinterC gcl)
-        printfn "Result: %A" (gcl)
-        compute n
-        with err -> compute (n-1)
+            // We parse the input string
+            let e = parse (Console.ReadLine())
+            // and print the result of evaluating it
+            //printfn "Result: %s" (prettyPrinterC (e)) //PrettyPrinter
+            printfn "The new set: %O" (compiler e (Edge("start")) (Edge("slut")) 0)
+            computeAST 1
+        with err -> printfn "Invalid input"
+                    computeAST 1
 
 // Start interacting with the user
-compute 3
+computeAST 1
