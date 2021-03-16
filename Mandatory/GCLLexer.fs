@@ -132,7 +132,7 @@ let trans : uint16[] array =
     (* State 60 *)
      [| 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 60us; 60us; 60us; 60us; 60us; 60us; 60us; 60us; 60us; 60us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; 65535us; |];
     |] 
-let actions : uint16[] = [|65535us; 0us; 1us; 1us; 2us; 39us; 39us; 4us; 5us; 6us; 7us; 8us; 9us; 10us; 13us; 14us; 15us; 16us; 19us; 20us; 22us; 23us; 27us; 28us; 65535us; 39us; 31us; 39us; 39us; 39us; 39us; 39us; 35us; 34us; 32us; 39us; 39us; 30us; 29us; 36us; 25us; 24us; 21us; 17us; 18us; 26us; 39us; 33us; 39us; 39us; 3us; 39us; 39us; 65535us; 65535us; 2us; 2us; 2us; 2us; 65535us; 2us; |]
+let actions : uint16[] = [|65535us; 0us; 1us; 1us; 2us; 39us; 39us; 4us; 5us; 6us; 7us; 8us; 9us; 10us; 13us; 14us; 15us; 16us; 19us; 20us; 22us; 23us; 27us; 28us; 65535us; 39us; 33us; 39us; 39us; 39us; 39us; 39us; 37us; 36us; 34us; 39us; 39us; 32us; 31us; 38us; 25us; 24us; 21us; 17us; 18us; 26us; 39us; 35us; 39us; 39us; 3us; 39us; 39us; 65535us; 65535us; 2us; 2us; 2us; 2us; 65535us; 2us; |]
 let _fslex_tables = FSharp.Text.Lexing.UnicodeTables.Create(trans,actions)
 let rec _fslex_dummy () = _fslex_dummy() 
 // Rule tokenize
@@ -274,63 +274,63 @@ and tokenize  lexbuf =
 # 274 "GCLLexer.fs"
           )
   | 27 -> ( 
-# 71 "GCLLexer.fsl"
-                                 C_LBRAC
+# 69 "GCLLexer.fsl"
+                                 LBRAC 
 # 279 "GCLLexer.fs"
           )
   | 28 -> ( 
-# 72 "GCLLexer.fsl"
-                                 C_RBRAC
+# 70 "GCLLexer.fsl"
+                                 RBRAC 
 # 284 "GCLLexer.fs"
           )
   | 29 -> ( 
-# 73 "GCLLexer.fsl"
-                                 ASSIGN 
+# 72 "GCLLexer.fsl"
+                                 C_LBRAC
 # 289 "GCLLexer.fs"
           )
   | 30 -> ( 
-# 74 "GCLLexer.fsl"
-                                 SKIP 
+# 73 "GCLLexer.fsl"
+                                 C_RBRAC
 # 294 "GCLLexer.fs"
           )
   | 31 -> ( 
-# 75 "GCLLexer.fsl"
-                                 SEMI_COLON
+# 74 "GCLLexer.fsl"
+                                 ASSIGN 
 # 299 "GCLLexer.fs"
           )
   | 32 -> ( 
-# 76 "GCLLexer.fsl"
-                                   IF 
+# 75 "GCLLexer.fsl"
+                                 SKIP 
 # 304 "GCLLexer.fs"
           )
   | 33 -> ( 
-# 77 "GCLLexer.fsl"
-                                   FI 
+# 76 "GCLLexer.fsl"
+                                 SEMI_COLON
 # 309 "GCLLexer.fs"
           )
   | 34 -> ( 
-# 78 "GCLLexer.fsl"
-                                   DO 
+# 77 "GCLLexer.fsl"
+                                   IF 
 # 314 "GCLLexer.fs"
           )
   | 35 -> ( 
-# 79 "GCLLexer.fsl"
-                                   OD 
+# 78 "GCLLexer.fsl"
+                                   FI 
 # 319 "GCLLexer.fs"
           )
   | 36 -> ( 
-# 86 "GCLLexer.fsl"
-                                  GC_BRAC
+# 79 "GCLLexer.fsl"
+                                   DO 
 # 324 "GCLLexer.fs"
           )
   | 37 -> ( 
-# 87 "GCLLexer.fsl"
-                                 LBRAC 
+# 80 "GCLLexer.fsl"
+                                   OD 
 # 329 "GCLLexer.fs"
           )
   | 38 -> ( 
-# 88 "GCLLexer.fsl"
-                                 RBRAC 
+# 87 "GCLLexer.fsl"
+                                  GC_BRAC
 # 334 "GCLLexer.fs"
           )
   | 39 -> ( 

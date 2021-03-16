@@ -8,7 +8,8 @@ open GCLParser
 #load "GCLLexer.fs"
 open GCLLexer
 
-
+open System.IO;
+open System.Text;
 //prettyprinter
 let rec prettyPrinterC gcl =
         match gcl with
@@ -62,18 +63,30 @@ let rec compilerC AST n1 n2  count =
         | SemiColonExpr(e1,e2)       ->  let nNew = Edge ("n" + (string (count+1)))
                                          (compilerC e1 n1 nNew (count+1)) @ (compilerC e2 nNew n2 (count+2))
         | ArrayAssignExpr(a,e1,e2)   ->  [Node(n1, a + "["+prettyPrinterA e1 + "]:=" + prettyPrinterA e2, n2)]
-        | IfExpr(e)                  ->  compilerGC e n1 n2 count
-        | DoExpr(e)                  ->  compilerGC e n1 n2 count
+        | IfExpr(e)                  ->  compilerGCDET e n1 n2 count ""
+        | DoExpr(e)                  ->  [Node(n1,(computeB e) +"| false)" ,n2)]@(compilerGCDET e n1 n1 count "") //todo fix
         | SkipExpr(s)                ->  [Node(n1, "skip",n2)]
 and compilerGC AST n1 n2 count =
     match AST with
-    | ArrowExpr(b,e) -> let nNew = Edge ("n" + (string (count+1)))
-                        [Node(n1, ("!"+ prettyPrinterB b),n2)] @ [Node(n1, (prettyPrinterB b),nNew)] @ (compilerC e nNew n1 count)
-    | GCLoopExpr(e1,e2) -> (compilerGC e1 n1 n2 count) @ (compilerGC e2 n1 n2 count)
-//and findDone expr =
-  //  match expr with
-    //| GCLoopExpr(e1,e2) -> string (findDone e1) + "&" + (findDone e2)
-    //| ArrowExpr(b,e) -> string "!"+ prettyPrinterB b
+    | ArrowExpr(b,e) -> let nNew = Edge ("q" + (string (count+1)))
+                        [Node(n1, (prettyPrinterB b),nNew)] @ (compilerC e nNew n2 (count+1))
+    | GCLoopExpr(e1,e2) -> (compilerGC e1 n1 n2 count) @ (compilerGC e2 n1 n2 (count+1))
+and compilerGCDET AST n1 n2 count boolx =
+    match AST with
+    | ArrowExpr(b,e) -> let nNew = Edge ("q" + (string (count+1)))
+                        match boolx with
+                        | "" -> [Node(n1, (prettyPrinterB b) + "& (!" + boolx + "false)",nNew)] @ (compilerC e nNew n2 (count+1))
+                        | _ -> [Node(n1, (prettyPrinterB b) + "& (!(" + boolx + "false))",nNew)] @ (compilerC e nNew n2 (count+1))           
+    | GCLoopExpr(e1,e2) -> (compilerGCDET e1 n1 n2 count boolx) @ (compilerGCDET e2 n1 n2 (count+1) (computeNonDet e1 + "|" + boolx))   
+and computeB AST =
+    match AST with
+    | ArrowExpr(b,e) -> "!" + prettyPrinterB b
+    | GCLoopExpr(e1,e2) -> "(" + (computeB e1) + ")&("+ (computeB e2) + ")"
+and computeNonDet AST =
+    match AST with
+    | ArrowExpr(b,e) -> prettyPrinterB b
+    | GCLoopExpr(e1,e2) -> "(" + (computeNonDet e1) + ")|("+ (computeNonDet e2) + ")"
+
 
 // Pase from calculator example, using to parse readline
 let parse input =
@@ -84,6 +97,10 @@ let parse input =
     // return the result of parsing (i.e. value of type "expr")
     res
 
+let rec graphString list =
+    match list with
+    | (Node(Edge(n1),action,Edge(n2)))::t -> string (n1 + "->" + n2 + "[label= \"" + action + "\"]") + graphString t
+    | [] -> ""
 // We implement here the function that interacts with the user
 let rec computeAST n =
    if n = 0 then
@@ -98,6 +115,11 @@ let rec computeAST n =
             printfn "Result: %s" (prettyPrinterC (e)) //PrettyPrinter
             //TEST do x>0 -> y:=x*y [] x>0 -> y:=x*y od
             printfn "The new set: %O" (compilerC e (Edge("start")) (Edge("slut")) 0)
+            
+            //Create graph file
+            File.WriteAllText("Test.dot", "digraph {" + graphString (compilerC e (Edge("start")) (Edge("slut")) 0) + "}")
+            
+            
             computeAST 1
         with err -> printfn "Invalid input"
                     computeAST 1
