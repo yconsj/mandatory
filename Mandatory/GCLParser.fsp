@@ -11,7 +11,7 @@ open GCLTypesAST
 // bools
 %token OR AND NOT EQUAL NOT_EQUAL GREATER SMALLER EQ_GREATER EQ_SMALLER B_LPAR B_RPAR LBRAC RBRAC
 %token COLON ARROW SKIP SEMI_COLON IF FI DO OD CONTINUE BREAK TRY CATCH YRT THROW HC_RBRAC HC_LBRAC COND_AND COND_OR
-%token ASSIGN C_LBRAC C_RBRAC GC_LBRAC GC_RBRAC
+%token ASSIGN C_LBRAC C_RBRAC GC_BRAC
 
 
 // We declare the initial non-terminal symbol
@@ -87,8 +87,8 @@ expressionA3:
 
 //Guarded command
 expressionGC0:  
+  | expressionGC0 GC_BRAC expressionGC0  { GCLoopExpr($1, $3)}
   | expressionB0 ARROW expressionC0                { ArrowExpr($1, $3)}
-  | expressionGC0 GC_LBRAC GC_RBRAC expressionGC0  { GCLoopExpr($1, $4)}
 // Command
 expressionC0:
   | X C_LBRAC expressionA0 C_RBRAC ASSIGN expressionA0        { ArrayAssignExpr($1,$3, $6)}

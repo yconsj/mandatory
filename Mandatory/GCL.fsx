@@ -56,16 +56,20 @@ type Node =
      | Node of Edge * string * Edge
 
 
-let rec compiler AST n1 n2 count =
+let rec compilerC AST n1 n2  count =
         match AST with
         | AssignExpr(a,e)            ->  [Node(n1, a + ":=" + prettyPrinterA e, n2)]
         | SemiColonExpr(e1,e2)       ->  let nNew = Edge ("n" + (string (count+1)))
-                                         (compiler e1 n1 nNew (count+1)) @ (compiler e2 n2 nNew (count+2))
+                                         (compilerC e1 n1 nNew (count+1)) @ (compilerC e2 nNew n2 (count+2))
         | ArrayAssignExpr(a,e1,e2)   ->  [Node(n1, a + "["+prettyPrinterA e1 + "]:=" + prettyPrinterA e2, n2)]
-        //| IfExpr(e)                  ->  compiler e n1 n2 count
-        //| DoExpr(e)                  ->  let b = findDone e
-        //                                 (compiler e n1 n2 count+1) @ [Node(n1, b,n2)]
+        | IfExpr(e)                  ->  compilerGC e n1 n2 count
+        | DoExpr(e)                  ->  compilerGC e n1 n2 count
         | SkipExpr(s)                ->  [Node(n1, "skip",n2)]
+and compilerGC AST n1 n2 count =
+    match AST with
+    | ArrowExpr(b,e) -> let nNew = Edge ("n" + (string (count+1)))
+                        [Node(n1, ("!"+ prettyPrinterB b),n2)] @ [Node(n1, (prettyPrinterB b),nNew)] @ (compilerC e nNew n1 count)
+    | GCLoopExpr(e1,e2) -> (compilerGC e1 n1 n2 count) @ (compilerGC e2 n1 n2 count)
 //and findDone expr =
   //  match expr with
     //| GCLoopExpr(e1,e2) -> string (findDone e1) + "&" + (findDone e2)
@@ -91,8 +95,9 @@ let rec computeAST n =
             // We parse the input string
             let e = parse (Console.ReadLine())
             // and print the result of evaluating it
-            //printfn "Result: %s" (prettyPrinterC (e)) //PrettyPrinter
-            printfn "The new set: %O" (compiler e (Edge("start")) (Edge("slut")) 0)
+            printfn "Result: %s" (prettyPrinterC (e)) //PrettyPrinter
+            //TEST do x>0 -> y:=x*y [] x>0 -> y:=x*y od
+            printfn "The new set: %O" (compilerC e (Edge("start")) (Edge("slut")) 0)
             computeAST 1
         with err -> printfn "Invalid input"
                     computeAST 1

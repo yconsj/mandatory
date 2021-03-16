@@ -32,8 +32,7 @@ rule tokenize = parse
 | '('           { B_LPAR }
 | ')'           { B_RPAR }
 
-| '['           { LBRAC }
-| ']'           { RBRAC }
+
 
 | '*'           { TIMES }
 | '/'           { DIV }
@@ -66,8 +65,7 @@ rule tokenize = parse
 
 //GC
 | "->"          { ARROW }
-| '['           { GC_LBRAC}
-| ']'           { GC_RBRAC}
+
 
 // C
 | '['           { C_LBRAC}
@@ -85,6 +83,8 @@ rule tokenize = parse
 //| "catch"         { CATCH }
 //| "yrt"           { YRT } 
 //| "throw"         { THROW }
-
+| "[]"           { GC_BRAC}
+| '['           { LBRAC }
+| ']'           { RBRAC }
 
 | x             { X((LexBuffer<_>.LexemeString lexbuf))}

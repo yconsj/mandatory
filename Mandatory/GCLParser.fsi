@@ -4,8 +4,7 @@ type token =
   | ASSIGN
   | C_LBRAC
   | C_RBRAC
-  | GC_LBRAC
-  | GC_RBRAC
+  | GC_BRAC
   | COLON
   | ARROW
   | SKIP
@@ -54,8 +53,7 @@ type tokenId =
     | TOKEN_ASSIGN
     | TOKEN_C_LBRAC
     | TOKEN_C_RBRAC
-    | TOKEN_GC_LBRAC
-    | TOKEN_GC_RBRAC
+    | TOKEN_GC_BRAC
     | TOKEN_COLON
     | TOKEN_ARROW
     | TOKEN_SKIP
