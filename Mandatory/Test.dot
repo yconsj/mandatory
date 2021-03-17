@@ -1,1 +1,1 @@
-digraph {start->slut[label= "(!((j>0)&&((A[(j-1)])>(A[j])))| false)"]start->q1[label= "((j>0)&&((A[(j-1)])>(A[j])))& (!false)"]q1->n2[label= "t:=(A[j])"]n2->n4[label= "A[j]:=(A[(j-1)])"]n4->n6[label= "A[(j-1)]:=t"]n6->start[label= "j:=(j-1)"]}
+digraph {start->n1[label= "y:=1"]n1->slut[label= "!(x>0)| false)"]n1->q3[label= "(x>0)& (!false)"]q3->n4[label= "y:=(x*y)"]n4->n1[label= "x:=(x-1)"]}
