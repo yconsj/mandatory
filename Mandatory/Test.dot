@@ -1,1 +1,1 @@
-digraph {start->n1[label= "y:=1"]n1->slut[label= "!(x>0)| false)"]n1->q3[label= "(x>0)& (!false)"]q3->n4[label= "y:=(x*y)"]n4->n1[label= "x:=(x-1)"]}
+digraph {start->n1[label= "y:=1"]n1->slut[label= "!((x>0)| false)"]n1->q3[label= "(x>0)& (!false)"]q3->n4[label= "y:=(x*y)"]n4->n1[label= "x:=(x-1)"]}

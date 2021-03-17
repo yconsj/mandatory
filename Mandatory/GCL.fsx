@@ -45,7 +45,7 @@ and prettyPrinterA gcl =
     | ArrayExpr(A,x)                                ->  string "(" + A+"[" + (prettyPrinterA x) + "])"
     | UPlusExpr(l)                                  ->  string "("+"" + (prettyPrinterA l) + ")"
     | UMinusExpr(l)                                 ->  string "(-" + (prettyPrinterA l) + ")"
-    | TimesExpr(l, r)                               ->  string  "("+(prettyPrinterA l) + "*" + (prettyPrinterA r) + ")"
+    | TimesExpr(l, r)                               ->  string "("+(prettyPrinterA l) + "*" + (prettyPrinterA r) + ")"
     | DivExpr(l,r)                                  ->  string "("+(prettyPrinterA l) + "/" + (prettyPrinterA r) + ")"
     | PlusExpr(l,r)                                 ->  string "("+(prettyPrinterA l) + "+" + (prettyPrinterA r) + ")"
     | MinusExpr(l,r)                                ->  string "("+(prettyPrinterA l) + "-" + (prettyPrinterA r) + ")"
@@ -65,7 +65,7 @@ let rec compilerC AST n1 n2  count =
                                                         (compilerC e1 n1 nNew (count+1)) @ (compilerC e2 nNew n2 (count+2))
         | ArrayAssignExpr(a,e1,e2)                  ->  [Node(n1, a + "["+prettyPrinterA e1 + "]:=" + prettyPrinterA e2, n2)]
         | IfExpr(e)                                 ->  compilerGCDET e n1 n2 count ""
-        | DoExpr(e)                                 ->  [Node(n1,(computeB e) + "| false)" ,n2)]@(compilerGCDET e n1 n1 count "") //todo fix
+        | DoExpr(e)                                 ->  [Node(n1, (computeB e) + "| false)" ,n2)]@(compilerGCDET e n1 n1 count "") //todo fix
         | SkipExpr(s)                               ->  [Node(n1, "skip",n2)]
 and compilerGC AST n1 n2 count =
     match AST with
@@ -81,7 +81,7 @@ and compilerGCDET AST n1 n2 count boolx =
     | GCLoopExpr(e1,e2)                             -> (compilerGCDET e1 n1 n2 count boolx) @ (compilerGCDET e2 n1 n2 (count+1) (computeNonDet e1 + "|" + boolx))   
 and computeB AST =
     match AST with
-    | ArrowExpr(b,e)                                -> "!" + prettyPrinterB b
+    | ArrowExpr(b,e)                                -> "!(" + prettyPrinterB b
     | GCLoopExpr(e1,e2)                             -> "(" + (computeB e1) + ")&("+ (computeB e2) + ")"
 and computeNonDet AST =
     match AST with
