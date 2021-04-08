@@ -4,7 +4,7 @@ open GCLTypesAST
 
 %token <string> X
 
-%token <float> NUM
+%token <int> NUM
 %token <bool> BOOL
 %token <string> ERR
 %token TIMES DIV PLUS MINUS POW LPAR RPAR MOD EOF 

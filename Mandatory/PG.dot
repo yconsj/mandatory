@@ -1,0 +1,1 @@
+digraph {start->n1[label= "i:=1"]n1->slut[label= "(!(i<n))"]n1->q3[label= "((i<n)&(!False))"]q3->n4[label= "j:=i"]n4->n6[label= "(!((j>0)&&((A[(j-1)])>(A[j]))))"]n4->q7[label= "(((j>0)&&((A[(j-1)])>(A[j])))&(!False))"]q7->n8[label= "t:=(A[j])"]n8->n10[label= "A[j]:=(A[(j-1)])"]n10->n12[label= "A[(j-1)]:=t"]n12->n4[label= "j:=(j-1)"]n6->n1[label= "i:=(i+1)"]}

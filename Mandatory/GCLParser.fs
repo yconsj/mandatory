@@ -56,7 +56,7 @@ type token =
   | EOF
   | ERR of (string)
   | BOOL of (bool)
-  | NUM of (float)
+  | NUM of (int)
   | X of (string)
 // This type is used to give symbolic names to token indexes, useful for error messages
 type tokenId = 
@@ -729,7 +729,7 @@ let _fsyacc_reductions ()  =    [|
                  : arithmeticExpr));
 # 730 "GCLParser.fs"
         (fun (parseState : FSharp.Text.Parsing.IParseState) ->
-            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : float)) in
+            let _1 = (let data = parseState.GetInput(1) in (Microsoft.FSharp.Core.Operators.unbox data : int)) in
             Microsoft.FSharp.Core.Operators.box
                 (
                    (

@@ -150,7 +150,7 @@ and tokenize  lexbuf =
           )
   | 2 -> ( 
 # 30 "GCLLexer.fsl"
-                                 NUM(Double.Parse(LexBuffer<_>.LexemeString lexbuf)) 
+                                 NUM(Int32.Parse(LexBuffer<_>.LexemeString lexbuf)) 
 # 154 "GCLLexer.fs"
           )
   | 3 -> ( 

@@ -47,7 +47,7 @@ type token =
   | EOF
   | ERR of (string)
   | BOOL of (bool)
-  | NUM of (float)
+  | NUM of (int)
   | X of (string)
 type tokenId = 
     | TOKEN_ASSIGN

@@ -2,7 +2,7 @@ module GCLTypesAST
 
 //Different types of expressions
 type arithmeticExpr =
-  | Num of float
+  | Num of int
   | Var of string
   | TimesExpr of (arithmeticExpr * arithmeticExpr)
   | DivExpr of (arithmeticExpr * arithmeticExpr)
@@ -39,3 +39,21 @@ type CExpr =
 and GCExpr =
   | ArrowExpr of (boolExpr * CExpr)
   | GCLoopExpr of (GCExpr * GCExpr)
+
+
+type Edge =  Node * Action * Node
+and Action =
+     | AssignAction of string * arithmeticExpr
+     | ArrayAssignAction of string * arithmeticExpr * arithmeticExpr
+     | BooleanAction of boolExpr
+     | SkipAction
+and Node =
+     | Node of string
+
+
+
+type Mem = Map<Key, int>
+and Key =
+    | Variable of string
+    | Array of string*int
+
