@@ -1,0 +1,1 @@
+digraph {start->slut[label= "(!(i<10))"]start->q1[label= "((i<10)&(!False))"]q1->q4[label= "(((A[i])<0)&(!(((A[i])>=0)|False)))"]q4->n2[label= "i:=(i+1)"]q1->q3[label= "(((A[i])>=0)&(!False))"]q3->n4[label= "x:=(x+(A[i]))"]n4->n2[label= "i:=(i+1)"]n2->start[label= "y:=(y+1)"]}

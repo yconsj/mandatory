@@ -1,0 +1,3 @@
+C:\Users\simon\OneDrive\DTU\datalogsk model\CL3\mandatory\Mandatory\obj\Debug\netcoreapp3.1\Mandatory.fsprojAssemblyReference.cache
+C:\Users\simon\OneDrive\DTU\datalogsk model\CL3\mandatory\Mandatory\obj\Debug\netcoreapp3.1\Mandatory.AssemblyInfoInputs.cache
+C:\Users\simon\OneDrive\DTU\datalogsk model\CL3\mandatory\Mandatory\obj\Debug\netcoreapp3.1\Mandatory.AssemblyInfo.fs

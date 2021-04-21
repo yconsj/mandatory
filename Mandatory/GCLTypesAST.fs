@@ -2,7 +2,7 @@ module GCLTypesAST
 
 //Different types of expressions
 type arithmeticExpr =
-  | Num of float
+  | Num of int
   | Var of string
   | TimesExpr of (arithmeticExpr * arithmeticExpr)
   | DivExpr of (arithmeticExpr * arithmeticExpr)
@@ -12,7 +12,7 @@ type arithmeticExpr =
   | ModExpr of (arithmeticExpr * arithmeticExpr)
   | UPlusExpr of (arithmeticExpr)
   | UMinusExpr of (arithmeticExpr)
-  | ArrayExpr of (String*arithmeticExpr)
+  | ArrayExpr of (string*arithmeticExpr)
 
  type boolExpr = 
   | Bool of bool
@@ -39,3 +39,30 @@ type CExpr =
 and GCExpr =
   | ArrowExpr of (boolExpr * CExpr)
   | GCLoopExpr of (GCExpr * GCExpr)
+
+
+type Edge =  Node * Action * Node
+and Action =
+     | AssignAction of string * arithmeticExpr
+     | ArrayAssignAction of string * arithmeticExpr * arithmeticExpr
+     | BooleanAction of boolExpr
+     | SkipAction
+and Node =
+     | Node of string
+
+
+
+type Mem = Map<Key, int> //memory as a map
+and Key =
+    | Variable of string
+    | Array of string*int
+
+
+
+//abstractmem = (map<string,sign>, map<string, set<sign>>)
+type Sign = 
+    | Plus
+    | Minus
+    | Zero
+type SignMem = Map<string, Sign>
+

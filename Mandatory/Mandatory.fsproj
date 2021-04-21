@@ -5,8 +5,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs"/>
+    <Compile Include="GCLLexer.fs"/>
+    <Compile Include="GCLLexer.fsl"/>
+    <Compile Include="GCLParser.fs"/>
+    <Compile Include="GCLParser.fsi"/>
+    <Compile Include="GCLTypesAST.fs"/>
+    <Compile Include="GCLParser.fsp"/>
+    <Compile Include="GCL.fsx"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FsLexYacc" Version="10.0.0"/>
+    <PackageReference Include="FsLexYacc" Version="10.2.0"/>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="14.3.0"/>
   </ItemGroup>
 </Project>
