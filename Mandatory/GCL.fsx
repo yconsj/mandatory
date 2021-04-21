@@ -352,11 +352,11 @@ let rec computeSignBool (aMem1, aMem2) expr =
                     Set.fold (fun acc elem -> Set.union acc (NotTable elem)) Set.empty set1 
 
 
-
 let rec detectSignAction (aMem1, aMem2) expr M = 
         match expr with
         | AssignExpr(s,a) -> 
         | ArrayAssignExpr(s,a1,a2) ->
+
 //Create table functions
 //make make big U on page 52
  

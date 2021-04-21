@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 digraph {start->slut[label= "(!(i<10))"]start->q1[label= "((i<10)&(!False))"]q1->q4[label= "(((A[i])<0)&(!(((A[i])>=0)|False)))"]q4->n2[label= "i:=(i+1)"]q1->q3[label= "(((A[i])>=0)&(!False))"]q3->n4[label= "x:=(x+(A[i]))"]n4->n2[label= "i:=(i+1)"]n2->start[label= "y:=(y+1)"]}
+=======
+digraph {start->n1[label= "i:=1"]n1->slut[label= "(!(i<n))"]n1->q3[label= "((i<n)&(!False))"]q3->n4[label= "j:=i"]n4->n6[label= "(!((j>0)&&((A[(j-1)])>(A[j]))))"]n4->q7[label= "(((j>0)&&((A[(j-1)])>(A[j])))&(!False))"]q7->n8[label= "t:=(A[j])"]n8->n10[label= "A[j]:=(A[(j-1)])"]n10->n12[label= "A[(j-1)]:=t"]n12->n4[label= "j:=(j-1)"]n6->n1[label= "i:=(i+1)"]}
+>>>>>>> 091e9c52fda1ac51da5fb8d85c814a1c43fdce56

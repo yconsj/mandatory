@@ -53,10 +53,10 @@ and Node =
 
 
 type Mem = Map<Key, int> //memory as a map
+
 and Key =
     | Variable of string
     | Array of string*int
-
 
 
 //abstractmem = (map<string,sign>, map<string, set<sign>>)
